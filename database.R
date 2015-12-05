@@ -17,7 +17,7 @@ sqliteListTables <- function(database, table) {
   require(DBI)
   require(RSQLite)
   con <- dbConnect(RSQLite::SQLite(), dbname = database)
-  return(dbListTables(conn))
+  return(dbListTables(con))
 }
 
 ## Database search
