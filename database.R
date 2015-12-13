@@ -1,7 +1,5 @@
 # SQLite
 
-## Database connection
-
 sqliteGetTable <- function(database, table) {
   require(DBI)
   require(RSQLite)
@@ -20,7 +18,14 @@ sqliteListTables <- function(database, table) {
   return(dbListTables(con))
 }
 
-## Database search
+sqliteWriteTable <- function(database, table_name, df) {
+  require(DBI)
+  require(RSQLite)
+  con <- dbConnect(RSQLite::SQLite(), dbname = database)
+  dbWriteTable(con, table_name, df)
+}
+
+
 
 
 
