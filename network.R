@@ -6,8 +6,8 @@ addDegreeToVertices <- function (g) {
   require(igraph)
   try(if(!(is.igraph(g))) stop("Not an igraph graph"))
   if (is_directed(g)) {
-    try(if('indegree' %in% list.vertex.attributes(g)) stop("Vertex attribure indegree already exists"))
-    try(if('outdegree' %in% list.vertex.attributes(g)) stop("Vertex attribure outdegree already exists"))
+    # try(if('indegree' %in% list.vertex.attributes(g)) stop("Vertex attribure indegree already exists"))
+    # try(if('outdegree' %in% list.vertex.attributes(g)) stop("Vertex attribure outdegree already exists"))
     V(g)$indegree <- degree(g, V(g), mode = 'in') 
     V(g)$outdegree <- degree(g, V(g), mode = 'out') 
   } else {
