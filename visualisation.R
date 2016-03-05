@@ -1,5 +1,7 @@
 # Visualisation
 
+## Plot sparklines
+
 ## mapping basic
 
 ## bar basic

@@ -8,11 +8,11 @@ addDegreeToVertices <- function (g) {
   if (is_directed(g)) {
     # try(if('indegree' %in% list.vertex.attributes(g)) stop("Vertex attribure indegree already exists"))
     # try(if('outdegree' %in% list.vertex.attributes(g)) stop("Vertex attribure outdegree already exists"))
-    V(g)$indegree <- degree(g, V(g), mode = 'in') 
-    V(g)$outdegree <- degree(g, V(g), mode = 'out') 
+    V(g)$indegree <- igraph::degree(g, V(g), mode = 'in') 
+    V(g)$outdegree <- igraph::degree(g, V(g), mode = 'out') 
   } else {
     try(if('degree' %in% list.vertex.attributes(g)) stop("Vertex attribure degree already exists"))
-    V(g)$degree <- degree(g, V(g)) 
+    V(g)$degree <- igraph::degree(g, V(g)) 
   }
   return(g)
 }
