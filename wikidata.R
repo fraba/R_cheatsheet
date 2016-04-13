@@ -53,4 +53,4 @@ AugmentWithWikiData <- function(df, wid_vector, instance_of, attributes, lang) {
   return(df)
 }
 
-View(AugmentWithWikiData(atenei, wid_vector, instance_of, attributes, lang))
+
