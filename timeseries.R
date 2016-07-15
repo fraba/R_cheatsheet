@@ -5,6 +5,15 @@ addDailyRollMeans <- function(df,
                               by_seq = 'day',
                               date_format = "%Y-%m-%d", 
                               do_melt = TRUE) {
+  
+  # Check 
+  if (!date_var %in% names(df)) {
+    stop(paste0("`", date_var, "` not found"))
+  }
+  if (!value_var %in% names(df)) {
+    stop(paste0("`", value_var, "` not found"))
+  }
+  
   require(zoo)
   
   df[[date_var]] <- as.Date(df[[date_var]], format = date_format, origin = "1970-01-01")
