@@ -1,8 +1,10 @@
 addDailyRollMeans <- function(df, 
                               date_var, 
                               value_var, 
-                              win_vec = c(7,30,60,90), 
-                              date_format = "%Y-%m-%d") {
+                              win_vec = c(7,30,60,90),
+                              by_seq = 'day',
+                              date_format = "%Y-%m-%d", 
+                              do_melt = TRUE) {
   require(zoo)
   
   df[[date_var]] <- as.Date(df[[date_var]], format = date_format, origin = "1970-01-01")
@@ -10,7 +12,7 @@ addDailyRollMeans <- function(df,
   all_dates <- 
     data.frame(date = seq(from = min(df[[date_var]], na.rm=T), 
                           to = max(df[[date_var]]), na.rm=T,
-                          by = 'day'), 
+                          by = by_seq), 
                stringsAsFactors = FALSE)
   
   df[[date_var]] <- as.character(df[[date_var]])
@@ -29,6 +31,12 @@ addDailyRollMeans <- function(df,
     
   }
   
-  return(df)
+  if (do_melt == FALSE) {
+    return(df)
+  } else {
+    require(reshape2)
+    df <- melt(df, id.vars = 'Var1')
+  }
+  
   
 }
