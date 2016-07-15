@@ -44,7 +44,7 @@ addDailyRollMeans <- function(df,
     return(df)
   } else {
     require(reshape2)
-    df <- melt(df, id.vars = 'Var1')
+    df <- melt(df, id.vars = date_var)
   }
   
   
