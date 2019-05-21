@@ -45,9 +45,11 @@ getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
     this_wikidata_id <- 
       this_res$query$pages[[1]]$pageprops$wikibase_item
     this_query_res <- getWikidataEntity(this_wikidata_id, wikipedia_project)
-    this_query_res$id <- this_wikidata_id
-    this_query_res$search_string <- string
-    wikidata_entities <- rbind(wikidata_entities, this_query_res)
+    if (nrow(this_query_res)>0) {
+      this_query_res$id <- this_wikidata_id
+      this_query_res$search_string <- string
+      wikidata_entities <- rbind(wikidata_entities, this_query_res)
+    }
   }
   return(wikidata_entities)
 }
