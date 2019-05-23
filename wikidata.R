@@ -4,6 +4,8 @@
 
 getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
   
+  wikidata_entities <- data.frame()
+  
   getWikidataEntity <- function(id, wikipedia_project) {
     require(WikidataQueryServiceR)
     base_url <- 
@@ -29,7 +31,9 @@ getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
   
   library(jsonlite)
   res1 <- 
-    fromJSON(sprintf(search_string_1, wikipedia_project, URLencode(string)))
+    try({fromJSON(sprintf(search_string_1, wikipedia_project, URLencode(string)))})
+  if (class(res1) == 'try-error') 
+    return(wikidata_entities)
   
   titles <- 
     gsub("https:\\/\\/([a-z]{2})\\.wikipedia\\.org\\/wiki\\/", "", res1[[4]])
@@ -37,18 +41,19 @@ getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
   search_string_2 <- 
     "https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops&titles=%s&format=json"
   
-  wikidata_entities <- data.frame()
-  
   for (i in 1:length(titles)) {
     this_res <- 
-      fromJSON(sprintf(search_string_2, wikipedia_project, titles[i]))
+      try({fromJSON(sprintf(search_string_2, wikipedia_project, titles[i]))})
+    if (class(this_res) == 'try-error') next
     this_wikidata_id <- 
       this_res$query$pages[[1]]$pageprops$wikibase_item
     this_query_res <- getWikidataEntity(this_wikidata_id, wikipedia_project)
-    if (nrow(this_query_res)>0) {
-      this_query_res$id <- this_wikidata_id
-      this_query_res$search_string <- string
-      wikidata_entities <- rbind(wikidata_entities, this_query_res)
+    if (length(this_query_res)>0) {
+      if (nrow(this_query_res)>0) {
+        this_query_res$id <- this_wikidata_id
+        this_query_res$search_string <- string
+        wikidata_entities <- rbind(wikidata_entities, this_query_res)
+      }
     }
   }
   return(wikidata_entities)
