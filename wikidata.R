@@ -11,20 +11,15 @@ getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
   getWikidataEntity <- function(id, wikipedia_project) {
     require(WikidataQueryServiceR)
     base_url <- 
-      'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
-      PREFIX wd: <http://www.wikidata.org/entity/> 
-      SELECT ?entityLabel ?instanceOf ?instanceOfLabel
+      'PREFIX wd: <http://www.wikidata.org/entity/> 
+      SELECT ?itemLabel ?itemDescription ?instanceOf ?instanceOfLabel
       WHERE 
         {
-        wd:%s rdfs:label ?entityLabel .
-        wd:%s wdt:P31 ?instanceOf .
-        ?instanceOf rdfs:label ?instanceOfLabel .
-        FILTER (langMatches( lang(?entityLabel), "%s" ) )
-        FILTER (langMatches( lang(?instanceOfLabel), "%s" ) )
+        VALUES ?item { wd:%s }
+        ?item wdt:P31 ?instanceOf .
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "%s" }
     }'
-    res <- query_wikidata(sprintf(base_url, id, id, 
-                                  toupper(wikipedia_project), 
-                                  toupper(wikipedia_project)))
+    res <- query_wikidata(sprintf(base_url, id, wikipedia_project))
     return(res)
   }
   
