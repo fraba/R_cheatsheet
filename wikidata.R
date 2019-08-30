@@ -4,6 +4,8 @@
 
 getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
   
+  cat(paste0("Searching: [", string, "]..."))
+  
   wikidata_entities <- data.frame()
   
   getWikidataEntity <- function(id, wikipedia_project) {
