@@ -27,7 +27,7 @@ getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
   }
   
   search_string_1 <-
-    "https://%s.wikipedia.org/w/api.php?action=opensearch&search=%s&limit=10&namespace=0&format=json&profile=engine_autoselect"
+    "https://%s.wikipedia.org/w/api.php?action=query&list=search&srsearch=%s&format=json&srqiprofile=classic"
   
   library(jsonlite)
   res1 <- 
@@ -36,14 +36,14 @@ getWikidataIdsFromString <- function(string, wikipedia_project = "it") {
     return(wikidata_entities)
   
   titles <- 
-    gsub("https:\\/\\/([a-z]{2})\\.wikipedia\\.org\\/wiki\\/", "", res1[[4]])
+    gsub("https:\\/\\/([a-z]{2})\\.wikipedia\\.org\\/wiki\\/", "", res1$query$search[[2]])
   
   search_string_2 <- 
     "https://%s.wikipedia.org/w/api.php?action=query&prop=pageprops&titles=%s&format=json"
   
-  for (i in 1:length(titles)) {
+  for (i in 1:1) {
     this_res <- 
-      try({fromJSON(sprintf(search_string_2, wikipedia_project, titles[i]))})
+      try({fromJSON(sprintf(search_string_2, wikipedia_project, URLencode(titles[i])))})
     if (class(this_res) == 'try-error') next
     this_wikidata_id <- 
       this_res$query$pages[[1]]$pageprops$wikibase_item
